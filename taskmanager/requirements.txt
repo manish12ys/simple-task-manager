@@ -1,1 +1,7 @@
+Flask
+gunicorn
+werkzeug
+itsdangerous
+jinja2
+click
 
