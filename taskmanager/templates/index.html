@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Task Manager</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        h1, a {
+            color: #A74AC7;
+            text-align: center;
+        }
+
+        /* Container Styling */
+        .container {
+            background-color: #1E1E1E;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            border: 1px solid #A74AC7;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #A74AC7;
+            background-color: #2C2C2C;
+            color: #E0E0E0;
+            font-size: 16px;
+            transition: 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml,<svg fill="%23A74AC7" height="20" width="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 30px;
+        }
+
+        button {
+            background-color: #A74AC7;
+            color: #121212;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #8B2FCB;
+            transform: translateY(-2px);
+        }
+
+        /* Task List Styling */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #2C2C2C;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #A74AC7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s ease;
+        }
+
+        li:hover {
+            background-color: #3A3A3A;
+        }
+
+        /* Button inside Task List */
+        li form {
+            display: inline;
+            margin-left: 10px;
+        }
+
+        li button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #A74AC7;
+            color: #121212;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        li button:hover {
+            background-color: #8B2FCB;
+        }
+
+        /* Links Styling */
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #A74AC7;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #8B2FCB;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome, {{ session['username'] }}</h1>
+
+    <form method="POST" action="{{ url_for('add_task') }}">
+        <input type="text" name="task" placeholder="Task" required>
+        <input type="date" name="date_to_complete" required>
+        <select name="priority" required>
+            <option value="" disabled selected>Select Priority</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+        </select>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task['task'] }} - {{ task['date_to_complete'] }} - {{ task['priority'] }}
+                <form method="POST" action="{{ url_for('complete_task', id=task['id']) }}">
+                    <button type="submit">Complete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('history') }}">View Task History</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+</body>
+</html>
